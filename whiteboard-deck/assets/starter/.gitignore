@@ -1,0 +1,12 @@
+/node_modules/
+/dist/
+/.build/
+/test-results/
+/playwright-report/
+/reference-local/
+/.env
+/.env.*
+*.pptx
+*.ppt
+*.log
+*.tsbuildinfo

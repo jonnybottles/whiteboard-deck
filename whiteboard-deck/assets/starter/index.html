@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <script>
+      (() => {
+        const param = new URLSearchParams(window.location.search).get("scoutTheme");
+        const theme =
+          param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="An offline, hand-drawn interactive whiteboard presentation." />
+    <meta name="color-scheme" content="light dark" />
+    <title>Whiteboard | A hand-drawn field guide</title>
+    <link rel="icon" href="data:," />
+  </head>
+  <body>
+    <a class="skip-link" href="#controls">Skip to presentation controls</a>
+    <main id="app">
+      <header class="masthead">
+        <div class="identity">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32"><path d="M5 25 7 7 25 5 27 23 5 25M12 19 21 10M18 10 21 10 21 13" /></svg>
+          </span>
+          <div><p class="eyebrow">THE WHITEBOARD SERIES</p><h1 id="deck-title">Whiteboard</h1></div>
+        </div>
+        <div class="masthead-actions">
+          <span class="offline-label"><span aria-hidden="true"></span>Made to work offline</span>
+          <button id="help" class="quiet-button" aria-label="Keyboard shortcuts">Shortcuts <kbd>?</kbd></button>
+        </div>
+      </header>
+
+      <div class="workspace">
+        <section class="presentation" aria-label="Whiteboard presentation">
+          <div class="board-heading">
+            <div><span id="board-number" class="folio">01 / 05</span><span id="board-name"></span></div>
+            <span id="board-theme" class="board-theme"></span>
+          </div>
+          <div class="paper">
+            <svg id="board" viewBox="0 0 1500 900" preserveAspectRatio="xMidYMid meet" role="group" aria-label="Animated whiteboard" tabindex="0"></svg>
+            <div id="start-overlay" class="start-overlay">
+              <p class="eyebrow">A BLANK CANVAS. A CONNECTED STORY.</p>
+              <h2 id="start-title">Let's draw the big picture.</h2>
+              <p id="start-description">One thought at a time. Move at your own pace.</p>
+              <button id="start" class="primary-button">Start drawing <span aria-hidden="true">&rarr;</span></button>
+              <p class="start-hint"><kbd>Space</kbd> to draw &nbsp; <kbd>Right</kbd> again to finish a step</p>
+            </div>
+            <span class="paper-corner" aria-hidden="true"></span>
+          </div>
+          <div class="beat-strip">
+            <div id="beat-progress" class="beat-progress" aria-label="Story step navigation"></div>
+            <div class="step-description"><span id="step-count"></span><span id="step-title"></span><span id="playback-status" class="playback-status"></span></div>
+          </div>
+        </section>
+
+        <aside id="detail-panel" class="detail-panel" aria-label="Presentation companion" hidden>
+          <div class="panel-heading"><h2>Behind the board</h2><button id="close-panel" class="icon-button" aria-label="Close companion panel">&times;</button></div>
+          <label class="sr-only" for="panel-mode">Companion content</label>
+          <select id="panel-mode"><option value="notes">Speaker notes</option><option value="transcript">Readable transcript</option><option value="sources">Sources &amp; availability</option></select>
+          <div id="panel-content" class="panel-content"></div>
+        </aside>
+      </div>
+
+      <nav id="controls" class="controls" aria-label="Presentation controls">
+        <div class="transport">
+          <button id="previous" class="icon-button" aria-label="Previous step" title="Previous step (Left)">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6" /></svg>
+          </button>
+          <button id="play" class="icon-button" aria-label="Play current step" title="Play or pause (K)">
+            <svg id="play-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 10 7-10 7Z" /></svg>
+          </button>
+          <button id="next" class="primary-button" title="Next / finish current step (Space or Right)">Next step <span aria-hidden="true">&rarr;</span></button>
+          <button id="replay" class="quiet-button" title="Replay board (R)">Replay</button>
+        </div>
+        <div class="presentation-options">
+          <button id="autoplay" class="toggle-button" aria-pressed="false" title="Toggle autoplay (A)">Autoplay</button>
+          <label class="speed-label" for="speed">Speed</label>
+          <select id="speed" aria-label="Drawing speed"><option value="0.5">0.5x</option><option value="1" selected>1x</option><option value="1.5">1.5x</option><option value="2">2x</option></select>
+          <button id="show-all" class="quiet-button">Show all</button>
+          <button id="notes" class="quiet-button" aria-expanded="false" aria-controls="detail-panel" title="Notes, transcript & sources (N)">Notes &amp; sources</button>
+          <button id="fullscreen" class="icon-button" aria-label="Enter presenter view" title="Presenter view: whiteboard only (F). Esc exits.">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5" /></svg>
+          </button>
+        </div>
+      </nav>
+
+      <footer class="app-footer">
+        <label for="board-select" class="sr-only">Choose a board</label><select id="board-select" aria-label="Choose a board"></select>
+        <p id="deck-caption">A field guide, drawn one idea at a time.</p>
+        <label class="motion-option"><input id="instant" type="checkbox" /> Instant reveals</label>
+      </footer>
+      <p id="announcement" class="sr-only" aria-live="polite" aria-atomic="true"></p>
+      <p id="error" class="error-message" role="alert" hidden></p>
+    </main>
+
+    <dialog id="shortcuts-dialog" aria-labelledby="shortcuts-title">
+      <div class="panel-heading"><h2 id="shortcuts-title">Keep the story moving</h2><button id="close-help" class="icon-button" aria-label="Close keyboard shortcuts">&times;</button></div>
+      <dl class="shortcuts">
+        <dt><kbd>Space</kbd> / <kbd>Right</kbd></dt><dd>Draw the next step. During drawing, finish this step.</dd>
+        <dt><kbd>Left</kbd></dt><dd>Go back one step.</dd>
+        <dt><kbd>K</kbd></dt><dd>Pause or resume drawing.</dd>
+        <dt><kbd>A</kbd></dt><dd>Toggle autoplay.</dd>
+        <dt><kbd>R</kbd></dt><dd>Replay this board.</dd>
+        <dt><kbd>N</kbd></dt><dd>Open notes, transcript and sources outside presenter view.</dd>
+        <dt><kbd>F</kbd></dt><dd>Toggle borderless presenter view. Only the whiteboard stays visible.</dd>
+        <dt><kbd>Esc</kbd></dt><dd>Leave presenter view or close this dialog.</dd>
+        <dt><kbd>?</kbd></dt><dd>Show these shortcuts outside presenter view.</dd>
+      </dl>
+      <p class="muted">Use Instant reveals to remove motion. Source links are optional and require an internet connection; everything else stays in this file.</p>
+    </dialog>
+    <noscript>This presentation needs JavaScript to draw. No server, account or internet connection is required.</noscript>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

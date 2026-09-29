@@ -1,0 +1,29 @@
+{
+  "name": "whiteboard-starter",
+  "version": "1.1.2",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "typecheck": "tsc --noEmit",
+    "prebuild": "node --experimental-strip-types scripts/pptx-artifacts.ts",
+    "build": "npm run typecheck && vite build && node scripts/export-html.mjs",
+    "build:pptx": "npm run build && node --experimental-strip-types scripts/export-pptx.ts",
+    "test": "vitest run",
+    "test:browser": "playwright test",
+    "test:pptx": "node --experimental-strip-types --test tests/pptx.test.mjs",
+    "check": "npm run build && npm test && npm run test:browser"
+  },
+  "devDependencies": {
+    "@jsamuel1/pptxgenjs": "5.0.9",
+    "@playwright/test": "1.63.0",
+    "@types/node": "22.20.3",
+    "typescript": "7.0.2",
+    "vite": "8.3.0",
+    "vite-plugin-singlefile": "2.3.3",
+    "vitest": "5.0.1"
+  }
+}

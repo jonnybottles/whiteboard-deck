@@ -1,0 +1,4 @@
+html, body { margin: 0; background: #fff; width: 1500px; height: 900px; overflow: hidden; }
+#measurement { position: absolute; left: -20000px; width: 1500px; height: 900px; }
+#capture { width: 1500px; height: 900px; background: var(--cp-board-paper); }
+#capture #board { width: 1500px; height: 900px; min-height: 0; max-height: none; aspect-ratio: auto; outline: none; }
